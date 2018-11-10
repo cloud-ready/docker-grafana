@@ -1,0 +1,39 @@
+version: '2.1'
+services:
+  grafana:
+    container_name: ${CONTAINER_HOST_NAME:-standalone.grafana}
+    environment:
+      INFLUXDB_HOST: standalone.influxdb
+      INFLUXDB_PORT: 8086
+      INFLUXDB_NAME: cadvisor
+      INFLUXDB_USER: cadvisor
+      INFLUXDB_PASS: cadvisor
+    hostname: ${CONTAINER_HOST_NAME:-standalone.grafana}
+    image: ${IMAGE_PREFIX:-grafana/}${IMAGE_NAME:-grafana}:${IMAGE_TAG:-5.3.2}
+    labels:
+      deploy.config.commit: ${LABEL_DEPLOY_CONFIG_COMMIT:-unknown}
+      deploy.config.name: ${LABEL_DEPLOY_CONFIG_NAME:-unknown}
+      deploy.config.ref: ${LABEL_DEPLOY_CONFIG_REF:-unknown}
+      deploy.util.commit: ${LABEL_DEPLOY_UTIL_COMMIT:-unknown}
+      deploy.util.ref: ${LABEL_DEPLOY_UTIL_REF:-unknown}
+      instance.name.short: ${LABEL_INSTANCE_NAME_SHORT:-standalone.grafana}
+      instance.name: ${LABEL_INSTANCE_NAME:-127.0.0.1/grafana/standalone}
+    networks:
+      local-network:
+        ipv4_address: 172.16.238.86
+        #ipv6_address: 2001:3984:3989::86
+    ports:
+    - "${EXTERNAL_GRAFANA_PORT:-3000}:${GRAFANA_PORT:-3000}"
+    restart: always
+
+
+networks:
+  local-network:
+    external: true
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.16.238.0/24
+      #- subnet: 2001:3984:3989::/64
