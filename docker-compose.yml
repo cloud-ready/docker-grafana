@@ -3,11 +3,11 @@ services:
   grafana:
     container_name: ${CONTAINER_HOST_NAME:-standalone.grafana}
     environment:
-      INFLUXDB_HOST: standalone.influxdb
-      INFLUXDB_PORT: 8086
-      INFLUXDB_NAME: cadvisor
-      INFLUXDB_USER: cadvisor
-      INFLUXDB_PASS: cadvisor
+      INFLUXDB_HOST: ${INFLUXDB_HOST:-standalone.tick-influxdb}
+      INFLUXDB_PORT: ${INFLUXDB_PORT:-8086}
+      INFLUXDB_NAME: ${INFLUXDB_NAME:-telegraf}
+      INFLUXDB_USER: ${INFLUXDB_USER:-telegraf}
+      INFLUXDB_PASS: ${INFLUXDB_PASS:-telegraf}
     hostname: ${CONTAINER_HOST_NAME:-standalone.grafana}
     image: ${IMAGE_PREFIX:-grafana/}${IMAGE_NAME:-grafana}:${IMAGE_TAG:-5.3.2}
     labels:
